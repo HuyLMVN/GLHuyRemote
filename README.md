@@ -1,5 +1,5 @@
 # GLTestMKFile
-This is my repos for OpenGL code, as a result of combining Opengl tutorials from Victor Gordan (YouTube) and Joey De Vries (learnopengl.com).
+This is my repos for OpenGL code, as a result of combining whatever I've learned from OpenGL tutorials from Victor Gordan (YouTube) and Joey De Vries (learnopengl.com).
 
 The GLFW library and header file go with this repos, while for Assimp, you might put your own lib file in lib folder and headers in include/extern folder, or just install it with a package manager.
 
