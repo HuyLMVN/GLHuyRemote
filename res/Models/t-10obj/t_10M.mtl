@@ -1,0 +1,75 @@
+# Blender MTL File: 't_10M.blend'
+# Material Count: 6
+
+newmtl body
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tank_body_diffuse.JPG
+refl tank_body_spec.JPG
+
+newmtl details
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd tank_details_diffuse.JPG
+
+newmtl gusi
+Ns 639.999995
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd gusi_diffuse.JPG
+refl gusi_specularJPG.JPG
+
+newmtl turret
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.447619 0.447619 0.447619
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd t_10_turret_diffuse.JPG
+refl t_10_turret_specular.JPG
+
+newmtl wheel1
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tank_wheel_1_diff.JPG
+map_Ns tank_wheel_1_rough.JPG
+refl tank_wheel_1_spec.JPG
+
+newmtl wheel_2
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tank_wheel_2_diffuse.JPG
+map_Ns tank_wheel_2_specular_rough.JPG
+refl tank_wheel_2_specular.JPG
