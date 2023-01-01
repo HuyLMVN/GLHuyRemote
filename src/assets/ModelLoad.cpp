@@ -26,14 +26,14 @@ void Model::Draw(Shader &shader, Camera &camera) {
 
 void Model::processNode(aiNode *node, const aiScene *scene)
 {
-    // process all the node's meshes (if any)
+    // Process nodes' meshes
     for(unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]]; 
         meshes.push_back(processMesh(mesh, scene));	
         
     }
-    // then do the same for each of its children
+    // Recursive node proceesing for children nodes
     for(unsigned int i = 0; i < node->mNumChildren; i++)
     {
         processNode(node->mChildren[i], scene);
@@ -45,7 +45,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
     
-    // walk through each of the mesh's vertices
+        // Walk through each of the mesh's vertices and retrive vertex coords, normals and texture coords
         for(unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
             Vertex vertex;
@@ -60,7 +60,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
             //if(AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &diffuse)) {
               //  vertex.color = {diffuse.r, diffuse.g, diffuse.b, diffuse.a};
             //}
-            // normals
+            // Retrieve normals
             if (mesh->HasNormals())
             {
                 vector.x = mesh->mNormals[i].x;
@@ -72,8 +72,6 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
             if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
             {
                 glm::vec2 vec;
-                // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
-                // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
                 vec.s = mesh->mTextureCoords[0][i].x;
                 vec.t = mesh->mTextureCoords[0][i].y;
                 vertex.texUV = vec;
@@ -86,7 +84,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         }
 
             
-    // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+        // Retrieve indices
         for(unsigned int i = 0; i < mesh->mNumFaces; i++)
         {
             aiFace face = mesh->mFaces[i];
@@ -94,11 +92,11 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
             for(unsigned int j = 0; j < face.mNumIndices; j++)
                 indices.push_back(face.mIndices[j]);        
         }
-        // process materials
+        // Process materials
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         std::vector<Texture> diffuseMaps = loadMaterialTexture(material, aiTextureType_DIFFUSE, "diffuse", scene);
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-        // 2. specular maps
+        
         std::vector<Texture> roughnessMaps = loadMaterialTexture(material, aiTextureType_DIFFUSE_ROUGHNESS, "specular", scene);
         textures.insert(textures.end(), roughnessMaps.begin(), roughnessMaps.end());
         
@@ -106,8 +104,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     return Mesh(vertices, indices, textures);
 }
 
-// checks all material textures of a given type and loads the textures if they're not loaded yet.
-// the required info is returned as a Texture struct.
+
 std::vector<Texture> Model::loadMaterialTexture(aiMaterial *mat, aiTextureType Type, std::string typeName, const aiScene* scene) {
         std::vector<Texture> textures;
         std::vector<std::string> loadedTexPath;
@@ -131,9 +128,11 @@ std::vector<Texture> Model::loadMaterialTexture(aiMaterial *mat, aiTextureType T
                     break;
                 }
             }
+            // Put diffuse texture in slot 0, specular textures in slot 1
             if(!skip) { 
                 if(typeName == "diffuse") {
                     if(((tPtr = scene->GetEmbeddedTexture(str.C_Str())) != nullptr)) {
+                        // Uses static_cast to void pointer then to unsigned char pointer to avoid reinterpret_cast issues
                         const unsigned char* texData= static_cast<unsigned char*>(static_cast<void*>(tPtr->pcData));
                         Texture texture(texData, tPtr->mWidth, tPtr->mHeight, typeName, 0);
                         loadedTex.push_back(texture);
@@ -162,24 +161,26 @@ std::vector<Texture> Model::loadMaterialTexture(aiMaterial *mat, aiTextureType T
         }
         return textures;
 }
-
+// Set models' Posiiton
 void Model::setPos(Shader& shader, const glm::vec3& sPos) {
     glm::mat4 uPos = glm::mat4(1.0f);
     uPos = glm::translate(sPos);
     glUniformMatrix4fv(glGetUniformLocation(shader.ID, "uPos"), 1, GL_FALSE, glm::value_ptr(uPos));
 }
+
+// Delete VAO, VBO and EBO once done.
 void Model::cleanMesh(Mesh& mesh) {
     mesh.VAO.Delete();
     mesh.meshVBO.Delete();
     mesh.meshEBO.Delete();
-    for(auto& tex : mesh.textures) {
-        tex.Delete();
+    for(auto& texture : mesh.textures) {
+        texture.Delete();
     }
 }
 
 Model::Model(const Model& c_Model) = default;
 Model::Model(Model&& m_Model) = default;
-
+// Custom destructor
 Model::~Model() {
     std::for_each(meshes.begin(), meshes.end(), this->cleanMesh);
 }

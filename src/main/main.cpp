@@ -53,7 +53,7 @@ int main() {
 
 	// Enables the Depth Buffer
     glEnable(GL_DEPTH_TEST);
-    
+    // std::map of loadable models' path 
     std::map<std::string, std::string>modelPath {
         {"teapot", "./res/Models/teapot/scene.gltf"},
         {"bwteapot", "./res/Models/teapot2/scene.gltf"},
