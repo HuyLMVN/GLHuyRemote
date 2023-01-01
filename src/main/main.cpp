@@ -70,7 +70,9 @@ int main() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    static_cast<void>(io);
+
+    ImFont* textFont = io.Fonts->AddFontFromFileTTF("res/GuiFont/RobotoMono.ttf", 20);
+    //static_cast<void>(io);
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 460");
@@ -110,14 +112,16 @@ int main() {
         camera.updateMatrix(60.0f, 0.1f, 1000.0f);
         tank.Draw(shaderProgram, camera);
         ImGui::SetNextWindowPos({0.0f, 1.0f});
-        ImGui::SetNextWindowSize({300.0f, 100.0f});
+        ImGui::SetNextWindowSize({425.0f, 120.0f});
+        ImGui::PushFont(textFont);
         ImGui::Begin(("Model: T-10M - " + newTitle).c_str());
         ImGui::Text("%s", ("x: " + std::to_string(camera.Position.x)).c_str());
         ImGui::Text("%s", ("y: " + std::to_string(camera.Position.y)).c_str());
         ImGui::Text("%s", ("z: " + std::to_string(camera.Position.z)).c_str());
         ImGui::End();
-
+        ImGui::PopFont();
         ImGui::Render();
+        
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window);
 		glfwPollEvents();
