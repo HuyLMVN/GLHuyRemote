@@ -20,7 +20,7 @@ out vec2 texCoord;
 out vec4 color;
 
 
-// Imports the camera matrix
+// Uniform for camera matrtix and scaling
 uniform mat4 camMatrix;
 uniform mat4 uPos;
 uniform mat4 scale;
@@ -36,6 +36,6 @@ void main()
 	color = aColor;
 	// Assigns the texture coordinates from the Vertex Data to "texCoord"
 	texCoord = aTex;
-	// Outputs the positions/coordinates of all vertices
+	// Output the positions/coordinates of all vertices
 	gl_Position = camMatrix * scale * vec4(crntPos, 1.0f);
 }
