@@ -10,6 +10,7 @@
 
 #include "ModelLoad.hpp"
 #include "Camera.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 static const int width = 1280;
 static const int height = 1024;
@@ -81,23 +82,31 @@ int main() {
     double crntTime = 0.0;
 
     double timeDiff;
+    float scale{1.0};
     unsigned int counter = 0;
     std::string newTitle;
 
+    
+
 	while(!glfwWindowShouldClose(window)) {
+
+        glm::mat4 sclMat = glm::mat4(1.0f);
+
+
         crntTime = glfwGetTime();
         timeDiff = crntTime - prevTime;
         counter++;
-        if(timeDiff >= 1.0 / 5.0) {
+        if(timeDiff >= 1.0 / 1.0) {
             std::stringstream FPS;
             FPS << std::setprecision(4) << (1.0 / timeDiff) * counter;
             std::stringstream ms;
             ms << std::setprecision(4) << (timeDiff / counter) * 1000;
-            newTitle = (FPS.str() + "FPS / " + ms.str() + "ms");
+            newTitle = ("Model Viewer - " + FPS.str() + "FPS / " + ms.str() + "ms");
+            glfwSetWindowTitle(window, newTitle.c_str());
             prevTime = crntTime;
             counter = 0;
         }
-
+        
         glfwGetFramebufferSize(window, &currentWidth, &currentHeight);
 		glClearColor(0.0f, 0.75f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -105,24 +114,37 @@ int main() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
-
+        if (!io.WantCaptureMouse) {
+            camera.Inputs(window);
+            camera.updateMatrix(60.0f, 0.1f, 1000.0f);
+        }
+        
         shaderProgram.Activate();
-        camera.Inputs(window);
-        camera.updateMatrix(60.0f, 0.1f, 1000.0f);
+        
+        
+         
         tank.Draw(shaderProgram, camera);
-        ImGui::SetNextWindowPos({0.0f, 1.0f});
-        ImGui::SetNextWindowSize({425.0f, 120.0f});
+        ImGui::SetNextWindowPos(ImVec2{0.0f, 1.0f});
+        ImGui::SetNextWindowSize(ImVec2{425.0f, 150.0f});
+        ImGui::SetNextWindowSizeConstraints(ImVec2{425.0f, 150.0f}, ImVec2{425.0f, 150.0f});
         ImGui::PushFont(textFont);
-        ImGui::Begin(("Model: T-10M - " + newTitle).c_str());
+        ImGui::Begin("Model: T-10M");
         ImGui::Text("%s", ("x: " + std::to_string(camera.Position.x)).c_str());
         ImGui::Text("%s", ("y: " + std::to_string(camera.Position.y)).c_str());
         ImGui::Text("%s", ("z: " + std::to_string(camera.Position.z)).c_str());
+        ImGui::SliderFloat("Model Scale", &scale, 0.5f, 2.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
         ImGui::End();
+
+        
+
         ImGui::PopFont();
         ImGui::Render();
-        
+         
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        sclMat = glm::scale(glm::vec3(scale, scale, scale));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "scale"), 1, GL_FALSE, glm::value_ptr(sclMat));
+        
+        
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	} 
