@@ -10,7 +10,6 @@
 
 #include "ModelLoad.hpp"
 #include "Camera.hpp"
-#include "glm/gtc/type_ptr.hpp"
 
 static const int width = 1280;
 static const int height = 1024;
@@ -91,12 +90,11 @@ int main() {
 	while(!glfwWindowShouldClose(window)) {
 
         glm::mat4 sclMat = glm::mat4(1.0f);
-
-
+        
         crntTime = glfwGetTime();
         timeDiff = crntTime - prevTime;
         counter++;
-        if(timeDiff >= 1.0 / 1.0) {
+        if(timeDiff >= 1.0 / 5.0) {
             std::stringstream FPS;
             FPS << std::setprecision(4) << (1.0 / timeDiff) * counter;
             std::stringstream ms;
@@ -120,31 +118,31 @@ int main() {
         }
         
         shaderProgram.Activate();
-        
-        
-         
         tank.Draw(shaderProgram, camera);
+
+        // Set ImGui position, size and constraints
         ImGui::SetNextWindowPos(ImVec2{0.0f, 1.0f});
         ImGui::SetNextWindowSize(ImVec2{425.0f, 150.0f});
         ImGui::SetNextWindowSizeConstraints(ImVec2{425.0f, 150.0f}, ImVec2{425.0f, 150.0f});
+        // Push custom font
         ImGui::PushFont(textFont);
+        // Start of window
         ImGui::Begin("Model: T-10M");
         ImGui::Text("%s", ("x: " + std::to_string(camera.Position.x)).c_str());
         ImGui::Text("%s", ("y: " + std::to_string(camera.Position.y)).c_str());
         ImGui::Text("%s", ("z: " + std::to_string(camera.Position.z)).c_str());
         ImGui::SliderFloat("Model Scale", &scale, 0.5f, 2.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+        // End of window
         ImGui::End();
 
         
-
+        // Pop current font and render window
         ImGui::PopFont();
         ImGui::Render();
-         
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        // Set model scaling
         sclMat = glm::scale(glm::vec3(scale, scale, scale));
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "scale"), 1, GL_FALSE, glm::value_ptr(sclMat));
-        
-        
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	} 
