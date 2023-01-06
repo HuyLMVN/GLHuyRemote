@@ -12,3 +12,5 @@ Please remember that this is not any serious project, I just want to share some 
 Victor Gordan's tutorial repos: https://github.com/VictorGordan/opengl-tutorials
 
 Joey De Vries's learnopengl.com repos: https://github.com/JoeyDeVries/LearnOpenGL
+
+Link to T-10 tank model source (not mine): https://skfb.ly/6QUSX

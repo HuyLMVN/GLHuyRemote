@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <iomanip>
 #include <map>
+#include <filesystem>
 #include <sstream>
 #include <string>
 
@@ -58,6 +59,7 @@ int main() {
         {"teapot", "./res/Models/teapot/scene.gltf"},
         {"bwteapot", "./res/Models/teapot2/scene.gltf"},
         {"t-10gltf", "./res/Models/t-10m/t_10M.gltf"},
+        // Backpack model requires stbi_set_flip_vertically_on_load(false) in texture loading code;
         {"backpack", "res/Models/backpack/backpack.obj"}
     };
 
@@ -67,11 +69,15 @@ int main() {
     Model tank = Model(modelPath["t-10gltf"]);
     tank.setPos(shaderProgram, glm::vec3(0.0f, -2.0f, 0.0f));
 
+    std::filesystem::path modelDir = tank.directory; 
+
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
 
     ImFont* textFont = io.Fonts->AddFontFromFileTTF("res/GuiFont/RobotoMono.ttf", 20);
+    ImVec2 GuiWindowSize = ImVec2(425.0f, 145.0f);
     //static_cast<void>(io);
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -122,12 +128,12 @@ int main() {
 
         // Set ImGui position, size and constraints
         ImGui::SetNextWindowPos(ImVec2{0.0f, 1.0f});
-        ImGui::SetNextWindowSize(ImVec2{425.0f, 150.0f});
-        ImGui::SetNextWindowSizeConstraints(ImVec2{425.0f, 150.0f}, ImVec2{425.0f, 150.0f});
+        ImGui::SetNextWindowSize(GuiWindowSize);
+        ImGui::SetNextWindowSizeConstraints(GuiWindowSize, GuiWindowSize);
         // Push custom font
         ImGui::PushFont(textFont);
         // Start of window
-        ImGui::Begin("Model: T-10M");
+        ImGui::Begin(("Model: " + modelDir.filename().string()).c_str());
         ImGui::Text("%s", ("x: " + std::to_string(camera.Position.x)).c_str());
         ImGui::Text("%s", ("y: " + std::to_string(camera.Position.y)).c_str());
         ImGui::Text("%s", ("z: " + std::to_string(camera.Position.z)).c_str());

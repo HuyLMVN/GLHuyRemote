@@ -17,15 +17,17 @@ class Model {
         Model(const std::string path);
         Model(const Model& c_Model);
         Model(Model&& m_Model);
+
         virtual ~Model();
         
         void Draw(Shader& shader, Camera& camera);
         void setPos(Shader& shader, const glm::vec3& sPos);
         std::vector<Texture> loadMaterialTexture(aiMaterial *mat, aiTextureType Type, std::string typeName, const aiScene* scene);
+        std::string directory;
     private:
         
         std::vector<Mesh> meshes;
-        std::string directory;
+        
         void loadModel(const std::string& path);
         void processNode(aiNode* node, const aiScene* scene);
         Mesh processMesh(aiMesh* mesh, const aiScene* scene);
