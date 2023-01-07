@@ -59,6 +59,7 @@ int main() {
         {"teapot", "./res/Models/teapot/scene.gltf"},
         {"bwteapot", "./res/Models/teapot2/scene.gltf"},
         {"t-10gltf", "./res/Models/t-10m/t_10M.gltf"},
+        {"cargo_ship", "./res/Models/cargo_ship/scene.gltf"},
         // Backpack model requires stbi_set_flip_vertically_on_load(false) in texture loading code;
         {"backpack", "res/Models/backpack/backpack.obj"}
     };
@@ -66,10 +67,10 @@ int main() {
     // Creates camera object:
 	Camera camera(&currentWidth, &currentHeight, glm::vec3(0.0f, 0.0f, 10.0f));
     shaderProgram.Activate();
-    Model tank = Model(modelPath["t-10gltf"]);
-    tank.setPos(shaderProgram, glm::vec3(0.0f, -2.0f, 0.0f));
+    Model model1 = Model("./res/Models/cargo_ship/scene.gltf");
+    model1.setPos(shaderProgram, glm::vec3(0.0f, -5.0f, 0.0f));
 
-    std::filesystem::path modelDir = tank.directory; 
+    std::filesystem::path modelDir = model1.directory; 
 
 
     IMGUI_CHECKVERSION();
@@ -124,7 +125,7 @@ int main() {
         }
         
         shaderProgram.Activate();
-        tank.Draw(shaderProgram, camera);
+        model1.Draw(shaderProgram, camera);
 
         // Set ImGui position, size and constraints
         ImGui::SetNextWindowPos(ImVec2{0.0f, 1.0f});
