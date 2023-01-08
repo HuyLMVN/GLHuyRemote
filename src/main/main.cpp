@@ -92,15 +92,13 @@ int main() {
     unsigned int counter = 0;
     std::string newTitle;
 
-    
-
 	while(!glfwWindowShouldClose(window)) {
 
         glm::mat4 sclMat = glm::mat4(1.0f);
-        
         crntTime = glfwGetTime();
         timeDiff = crntTime - prevTime;
         counter++;
+
         if(timeDiff >= 1.0 / 5.0) {
             std::stringstream FPS;
             FPS << std::setprecision(4) << (1.0 / timeDiff) * counter;
@@ -111,7 +109,6 @@ int main() {
             prevTime = crntTime;
             counter = 0;
         }
-        
         glfwGetFramebufferSize(window, &currentWidth, &currentHeight);
 		glClearColor(0.0f, 0.75f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -119,6 +116,7 @@ int main() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+
         if (!io.WantCaptureMouse) {
             camera.Inputs(window);
             camera.updateMatrix(60.0f, 0.1f, 1000.0f);
@@ -126,7 +124,9 @@ int main() {
         
         shaderProgram.Activate();
         model1.Draw(shaderProgram, camera);
-
+        
+        std::stringstream outCoords;
+        outCoords << std::fixed << std::setprecision(2) << "Coordinates: " << camera.Position.x << ", " << camera.Position.y << ", " << camera.Position.z; 
         // Set ImGui position, size and constraints
         ImGui::SetNextWindowPos(ImVec2{0.0f, 1.0f});
         ImGui::SetNextWindowSize(GuiWindowSize);
@@ -135,18 +135,15 @@ int main() {
         ImGui::PushFont(textFont);
         // Start of window
         ImGui::Begin(("Model: " + modelDir.filename().string()).c_str());
-        ImGui::Text("%s", ("x: " + std::to_string(camera.Position.x)).c_str());
-        ImGui::Text("%s", ("y: " + std::to_string(camera.Position.y)).c_str());
-        ImGui::Text("%s", ("z: " + std::to_string(camera.Position.z)).c_str());
+        ImGui::Text("%s", outCoords.str().c_str()); 
         ImGui::SliderFloat("Model Scale", &scale, 0.5f, 2.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
         // End of window
         ImGui::End();
-
-        
         // Pop current font and render window
         ImGui::PopFont();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         // Set model scaling
         sclMat = glm::scale(glm::vec3(scale, scale, scale));
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "scale"), 1, GL_FALSE, glm::value_ptr(sclMat));
@@ -154,7 +151,6 @@ int main() {
 		glfwPollEvents();
 	} 
     
-
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
