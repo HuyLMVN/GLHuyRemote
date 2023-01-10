@@ -67,8 +67,8 @@ int main() {
     // Creates camera object:
 	Camera camera(&currentWidth, &currentHeight, glm::vec3(0.0f, 0.0f, 10.0f));
     shaderProgram.Activate();
-    Model model1 = Model("./res/Models/cargo_ship/scene.gltf");
-    model1.setPos(shaderProgram, glm::vec3(0.0f, -5.0f, 0.0f));
+    Model model1 = Model(modelPath["t-10gltf"]);
+    model1.setPos(shaderProgram, glm::vec3(0.0f, -2.0f, 0.0f));
 
     std::filesystem::path modelDir = model1.directory; 
 
@@ -99,11 +99,11 @@ int main() {
         timeDiff = crntTime - prevTime;
         counter++;
 
-        if(timeDiff >= 1.0 / 5.0) {
+        if(timeDiff >= 1.0 / 2.0) {
             std::stringstream FPS;
-            FPS << std::setprecision(4) << (1.0 / timeDiff) * counter;
+            FPS << std::fixed << std::setprecision(2) << (1.0 / timeDiff) * counter;
             std::stringstream ms;
-            ms << std::setprecision(4) << (timeDiff / counter) * 1000;
+            ms << std::fixed << std::setprecision(2) << (timeDiff / counter) * 1000;
             newTitle = ("Model Viewer - " + FPS.str() + "FPS / " + ms.str() + "ms");
             glfwSetWindowTitle(window, newTitle.c_str());
             prevTime = crntTime;
