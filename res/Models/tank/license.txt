@@ -1,0 +1,11 @@
+Model Information:
+* title:	Military Tank
+* source:	https://sketchfab.com/3d-models/military-tank-7670a13196eb4b14b70ce677e402e220
+* author:	Aranna (https://sketchfab.com/Aranna)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Military Tank" (https://sketchfab.com/3d-models/military-tank-7670a13196eb4b14b70ce677e402e220) by Aranna (https://sketchfab.com/Aranna) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
