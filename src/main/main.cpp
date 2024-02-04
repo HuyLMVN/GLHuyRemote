@@ -48,6 +48,8 @@ int main() {
 
 	// Enables the Depth Buffer
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     // std::map of loadable models' path 
     std::map<std::string, std::string>modelPath {
         {"teapot", "./res/Models/teapot/scene.gltf"},
@@ -93,7 +95,7 @@ int main() {
         timeDiff = crntTime - prevTime;
         counter++;
 
-        if(timeDiff >= 1.0 / 2.0) {
+        if(timeDiff >= 1.0 / 1.0) {
             std::stringstream FPS;
             FPS << std::fixed << std::setprecision(2) << (1.0 / timeDiff) * counter;
             std::stringstream ms;
